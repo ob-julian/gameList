@@ -84,7 +84,6 @@ Further more a /.well-known/ redirect is implemented, so passwordm Managers can 
 #### Steps
 
 1. Open a terminal
-    ```
 2. Build the application
     ```bash
     ./mvnw clean package
