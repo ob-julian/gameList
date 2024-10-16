@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <meta http-equiv="refresh" th:content="'5; url=' + @{/}" />
+
+
+</head>
+<body>
+    <div th:insert="~{fragments :: themeSwitcher}"></div>
+    <div th:switch="${status}">
+        <h1 class="header-title" th:case="403">Sorry, you are not authorized to access this page.</h1>
+        <h1 class="header-title" th:case="404">Sorry, wrong Multiverse. This page does not exist here.</h1>
+        <h1 class="header-title" th:case="500">Sorry, something went wrong. Please try again later.</h1>
+        <h1 class="header-title" th:case="418">I'm a teapot. I cannot brew coffee.</h1>
+        <h1 class="header-title" th:case="*" th:text="${status + ': ' + error}"></h1>
+    </div>
+
+
+    <div class="form-div center-form" style="flex-direction: row;">
+        Redirecting to <a th:href="@{/}" class="redirect-link" style="color: green; margin: 5px;">home</a> in 5 seconds.
+    </div>
+</body>
+</html>

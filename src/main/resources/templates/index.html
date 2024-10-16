@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Games List</title>
+    <script>
+
+        function autoResizeTextarea(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = (textarea.scrollHeight) + 'px';
+        }
+
+        function editGame(gameId) {
+            document.getElementById('view-' + gameId).style.display = 'none';
+            document.getElementById('edit-' + gameId).style.display = 'block';
+            autoResizeTextarea(document.getElementById('description-' + gameId));
+        }
+
+        function cancelEdit(gameId) {
+            document.getElementById('view-' + gameId).style.display = 'block';
+            document.getElementById('edit-' + gameId).style.display = 'none';
+        }
+    </script>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body class="darkMode">
+    <div class="header-container">
+        <div th:insert="~{fragments :: themeSwitcher}" class="theme-switcher"></div>
+        <div sec:authorize="isAuthenticated()">
+            <a th:href="@{/logout}" class="logout-button">Logout</a>
+        </div>
+    </div>
+    <h1 class="header-title">My Games</h1>
+    <div>
+        <div th:if="${games.isEmpty()}" class="game-card center-form">
+            Pretty empty here :(
+        </div>
+        <div th:each="game : ${games}">
+            <div th:id="'view-' + ${game.id}" class="game-card">
+                <img th:src="${game.imageUrl}" alt="Game icon" class="game-icon" />
+                <h2 th:text="${game.name}" class="game-title"></h2>
+                <p th:text="${game.description}" class="game-description preformatted"></p>
+            
+                <div class="game-info">
+                    <p class="platform-info">Available on: 
+                        <a th:href="@{${game.url}}" target="_blank" class="play-button" th:text="${game.platform}"></a>
+                    </p>
+                </div>
+
+                <div class="game-info">
+                    <p class="language-info">Available in: 
+                        <span th:text="${game.languages}"></span>
+                    </p>
+                </div>
+            
+                <div class="code-link">
+                    <a th:href="@{${game.codeUrl}}" target="_blank" class="code-button">Code</a>
+                </div>
+            
+                <div class="admin-actions" sec:authorize="isAuthenticated()">
+                    <button th:onclick="'editGame(' + ${game.id} + ')'" class="edit-button">Edit</button>
+                    <form th:method="delete" th:action="@{/deleteGame/{id}(id=${game.id})}" class="delete-form" style="display: inline;">
+                        <button type="submit" class="delete-button">Delete</button>
+                    </form>
+                </div>
+            </div>
+            
+            
+            <div th:id="'edit-' + ${game.id}" class="edit-form" style="display: none;">
+                <form th:action="@{/editGame/{id}(id=${game.id})}" th:method="put">
+                    <div class="form-group">
+                        <label th:for="'name-' + ${game.id}">Name:</label>
+                        <input type="text" th:id="'name-' + ${game.id}" name="name" th:value="${game.name}" required class="form-input">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label th:for="'description-' + ${game.id}">Description:</label>
+                        <textarea th:id="'description-' + ${game.id}" name="description" th:text="${game.description}" required class="form-textarea"></textarea>
+                    </div>
+            
+                    <div class="form-group">
+                        <label th:for="'platform-' + ${game.id}">Platform:</label>
+                        <input type="text" th:id="'platform-' + ${game.id}" name="platform" th:value="${game.platform}" required class="form-input">
+                    </div>
+
+                    <div class="form-group">
+                        <label th:for="'languages-' + ${game.id}">Languages:</label>
+                        <input type="text" th:id="'languages-' + ${game.id}" name="languages" th:value="${game.languages}" required class="form-input">
+                    </div>
+            
+                    <div class="form-group">
+                        <label th:for="'url-' + ${game.id}">URL:</label>
+                        <input type="text" th:id="'url-' + ${game.id}" name="url" th:value="${game.url}" required class="form-input">
+                    </div>
+            
+                    <div class="form-group">
+                        <label th:for="'imageUrl-' + ${game.id}">Image URL:</label>
+                        <input type="text" th:id="'imageUrl-' + ${game.id}" name="imageUrl" th:value="${game.imageUrl}" required class="form-input">
+                    </div>
+            
+                    <div class="form-group">
+                        <label th:for="'code-' + ${game.id}">CodeUrl:</label>
+                        <input type="text" th:id="'code-' + ${game.id}" name="codeUrl" th:value="${game.codeUrl}" required class="form-input">
+                    </div>
+            
+                    <div class="form-actions" sec:authorize="isAuthenticated()">
+                        <button type="submit" class="save-button">Save</button>
+                        <button type="button" th:onclick="'cancelEdit(' + ${game.id} + ')'" class="cancel-button">Cancel</button>
+                    </div>
+                </form>
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- Element visible only to authenticated users -->
+    <div sec:authorize="isAuthenticated()" class="form-div">
+        <h2>Add a New Game</h2>
+        <form method="post" th:action="@{/addGame}">
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required class="form-input">
+            </div>
+    
+            <div class="form-group">
+                <label for="description">Description:</label>
+                <textarea id="description" name="description" required class="form-textarea"></textarea>
+            </div>
+    
+            <div class="form-group">
+                <label for="platform">Platform:</label>
+                <input type="text" id="platform" name="platform" required class="form-input">
+            </div>
+
+            <div class="form-group">
+                <label for="languages">Languages:</label>
+                <input type="text" id="languages" name="languages" required class="form-input">
+            </div>
+    
+            <div class="form-group">
+                <label for="url">URL:</label>
+                <input type="text" id="url" name="url" required class="form-input">
+            </div>
+    
+            <div class="form-group">
+                <label for="imageUrl">Image URL:</label>
+                <input type="text" id="imageUrl" name="imageUrl" required class="form-input">
+            </div>
+    
+            <div class="form-group">
+                <label for="codeUrl">Code Url:</label>
+                <input type="text" id="codeUrl" name="codeUrl" required class="form-input">
+            </div>
+    
+            <div class="form-actions">
+                <button type="submit" class="submit-button">Add Game</button>
+            </div>
+        </form>
+    </div>
+
+    <div th:insert="~{fragments :: footer}"></div>
+
+</body>
+</html>

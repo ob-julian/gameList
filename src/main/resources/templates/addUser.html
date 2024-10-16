@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add User</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body class="darkMode">
+    <div th:insert="~{fragments :: themeSwitcher}"></div>
+    <h1 class="header-title">Add User</h1>
+    <div class="form-div center-form">
+        <div th:if="${param.userCreationError}">
+            Error creating user. Please check the details and try again.
+        </div>
+        <form th:action="@{/addUser}" method="post">
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required/>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" autocomplete="new-password" required/>
+            </div>
+
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password:</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" autocomplete="new-password" required/>
+            </div>
+
+            <div class="form-group">
+                <label for="role">Role:</label>
+                <select id="role" name="roleId" required>
+                    <option th:each="role : ${roles}" th:value="${role.id}" th:text="${role.name}"></option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="passwordChangeRequired">User must change password on next login:</label>
+                <input type="checkbox" id="passwordChangeRequired" name="passwordChangeRequired"/>
+            </div>
+
+            <button type="submit" class="submit-button">Add User</button>
+        </form>
+    </div>
+</body>
+</html>
