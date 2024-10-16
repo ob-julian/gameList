@@ -65,15 +65,11 @@ Further more a /.well-known/ redirect is implemented, so passwordm Managers can 
 #### Steps
 
 1. Open a terminal
-2. Navigate to the backend directory
-    ```bash
-    cd backend
-    ```
-3. Run the application
+2. Run the application
     ```bash
     ./mvnw spring-boot:run
     ```
-4. The application will be running on `http://localhost:8080`
+3. The application will be running on `http://localhost:8080`
 
 ### Production
 
@@ -88,19 +84,16 @@ Further more a /.well-known/ redirect is implemented, so passwordm Managers can 
 #### Steps
 
 1. Open a terminal
-2. Navigate to the backend directory
-    ```bash
-    cd backend
     ```
-3. Build the application
+2. Build the application
     ```bash
     ./mvnw clean package
     ```
-4. Build the docker image
+3. Build the docker image
     ```bash
     docker build -t game-listing .
     ```
-5. Run the docker container
+4. Run the docker container
     All positional arguments:
     - CONTEXT_PATH: \
     The context path of the application, application will be running on `http://localhost:8080/CONTEXT_PATH`
