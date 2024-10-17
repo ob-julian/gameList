@@ -84,15 +84,11 @@ Further more a /.well-known/ redirect is implemented, so passwordm Managers can 
 #### Steps
 
 1. Open a terminal
-2. Build the application
-    ```bash
-    ./mvnw clean package
-    ```
-3. Build the docker image
+2. Build the docker image
     ```bash
     docker build -t game-listing .
     ```
-4. Run the docker container
+3. Run the docker container
     All positional arguments:
     - CONTEXT_PATH: \
     The context path of the application, application will be running on `http://localhost:8080/CONTEXT_PATH`
@@ -103,12 +99,20 @@ Further more a /.well-known/ redirect is implemented, so passwordm Managers can 
 
     > Please note that the database is accessible on `http://localhost:8080/COTEXT_PATH/h2-console` but only if you are authenticated.
 
-    So thecommand for running the container can be: \
-    ```bash
-    docker run -p 8080:8080 -e CONTEXT_PATH=/game-listing -e DB_USER=sa -e DB_PASSWORD=password game-listing
-    ```
+    Optional flags:
+    - `-d`: \
+    Run the container in the background
+    - `--restart always`: \
+    Restart the container automatically
+    - `--name game-listing`: \
+    Name the container
 
-5. The application will be running on `http://localhost:8080/CONTEXT_PATH` dont forget to configure the firewall to allow the port 8080 or put it behind a reverse proxy.
+
+    One example:
+    ```bash
+    docker run -p 8080:8080 -e CONTEXT_PATH=/gameList -e DB_USER=sa -e DB_PASSWORD=password -d --restart always --name game-listing game-listing
+    ```
+4. The application will be running on `http://localhost:8080/CONTEXT_PATH` dont forget to configure the firewall to allow the port 8080 or put it behind a reverse proxy.
 
 #### Reverse Proxy
 the application can be put behind a reverse proxy like Nginx or Apache, here is an example of a Apache configuration:
