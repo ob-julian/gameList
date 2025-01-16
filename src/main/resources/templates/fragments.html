@@ -52,7 +52,12 @@
             <option value="auto">Auto</option>
         </select>
         <script>
-            document.getElementById("themeSwitcher").value = localStorage.getItem("theme") || "auto";
+            const validThemes = ["light", "dark", "auto"];
+            let theme = localStorage.getItem("theme");
+            if (!validThemes.includes(theme)) {
+                theme = "auto";
+            }
+            document.getElementById("themeSwitcher").value = theme;
         </script>
     </div>
 
