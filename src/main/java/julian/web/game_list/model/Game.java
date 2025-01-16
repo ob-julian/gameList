@@ -47,6 +47,10 @@ public class Game {
 
     public String getLanguages() { return languages; }
     public void setLanguages(String languages) {
+        if (languages == null) {
+            this.languages = null;
+            return;
+        }
         // Sort the languages alphabetically
         this.languages = Arrays.stream(languages.split(","))
                                .map(String::trim)
