@@ -77,10 +77,6 @@ Further more a /.well-known/ redirect is implemented, so passwordm Managers can 
 
 - Docker \
   Download and install from [Docker](https://www.docker.com/products/docker-desktop)
-- java \
-  Download and install from [Java](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html)
-- maven \
-    Comes with the Project
 #### Steps
 
 1. Open a terminal
@@ -88,7 +84,7 @@ Further more a /.well-known/ redirect is implemented, so passwordm Managers can 
     ```bash
     docker build -t game-listing .
     ```
-3. Run the docker container
+3. Run the docker container \
     All positional arguments:
     - CONTEXT_PATH: \
     The context path of the application, application will be running on `http://localhost:8080/CONTEXT_PATH`
