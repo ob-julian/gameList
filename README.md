@@ -85,7 +85,7 @@ Further more a /.well-known/ redirect is implemented, so passwordm Managers can 
     docker build -t game-listing .
     ```
 3. Run the docker container \
-    All positional arguments:
+    All possible arguments:
     - CONTEXT_PATH: \
     The context path of the application, application will be running on `http://localhost:8080/CONTEXT_PATH`
     - DB_USER: \
