@@ -25,8 +25,23 @@
                     break;
             }
 
+            let autoThemeSwitchListener = window.matchMedia('(prefers-color-scheme: dark)');
+
             function setTheme(theme) {
                 localStorage.setItem("theme", theme);
+
+                if (["light", "dark"].includes(theme) === false) {
+                    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                        theme = "dark";
+                    }
+                    else{
+                        theme = "light";
+                    }
+                    autoThemeSwitchListener.addEventListener('change', setTheme); // we can just pass the setTheme function because we need the theme parameter to be not the correct names inorder to be auto, so null suffices
+                } else {
+                    autoThemeSwitchListener.removeEventListener('change', setTheme);
+                }
+
                 document.body.classList.remove("lightMode");
                 document.body.classList.remove("darkMode");
                 switch(theme) {
