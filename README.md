@@ -77,27 +77,32 @@ Further more a /.well-known/ redirect is implemented, so passwordm Managers can 
 
 - Docker \
   Download and install from [Docker](https://www.docker.com/products/docker-desktop)
-- java \
-  Download and install from [Java](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html)
-- maven \
-    Comes with the Project
+
 #### Steps
 
+##### Without Docker Compose
+
+Personaly Id recommend using Docker Compose, but if you want to run the container without it, here is how:
+
 1. Open a terminal
-2. Build the docker image
-    ```bash
-    docker build -t game-listing .
-    ```
-3. Run the docker container
+2. Run the docker container\
     All positional arguments:
     - CONTEXT_PATH: \
     The context path of the application, application will be running on `http://localhost:8080/CONTEXT_PATH`
+    - DB_URL: \
+    The URL of the database, default is `jdbc:h2:file:/h2/game-listing`. SO feel free use what DB you want as long as it is supported by Spring Boot. But be aware that I only tested it with H2.
     - DB_USER: \
     Name of the database user
     - DB_PASSWORD:\
     Password of the database user
 
     > Please note that the database is accessible on `http://localhost:8080/COTEXT_PATH/h2-console` but only if you are authenticated.
+
+    To ensure that the database is retained between container updates, you can mount a volume to the `/h2` directory. This can be done by adding the following flag to the `docker run` command:
+    
+    ```bash
+    -v /path/to/host/directory:/h2
+    ```
 
     Optional flags:
     - `-d`: \
@@ -110,9 +115,23 @@ Further more a /.well-known/ redirect is implemented, so passwordm Managers can 
 
     One example:
     ```bash
-    docker run -p 8080:8080 -e CONTEXT_PATH=/gameList -e DB_USER=sa -e DB_PASSWORD=password -d --restart always --name game-listing game-listing
+    docker run -p 8080:8080 -e CONTEXT_PATH=/gameList -e DB_USER=sa -e DB_PASSWORD=password -v h2-data:/h2 -d --restart always --name game-listing game-listing
     ```
-4. The application will be running on `http://localhost:8080/CONTEXT_PATH` dont forget to configure the firewall to allow the port 8080 or put it behind a reverse proxy.
+
+3. The application will be running on `http://localhost:8080/CONTEXT_PATH` dont forget to configure the firewall to allow the port 8080 or put it behind a reverse proxy.  
+
+##### With Docker Compose
+
+1. Change build configuration
+    - Open the `docker-compose.yml` file
+    - Change the `CONTEXT_PATH` environment variable to the desired context path
+    - Fell free to also change the other environment variables
+2. Open a terminal 
+3. Build and start the Docker Compose setup
+    ```bash
+    docker-compose up -d --build
+    ```
+3. The application will be running on `http://localhost:8080/CONTEXT_PATH`. Don't forget to configure the firewall to allow port 8080 or put it behind a reverse proxy.
 
 #### Reverse Proxy
 the application can be put behind a reverse proxy like Nginx or Apache, here is an example of a Apache configuration:
@@ -130,3 +149,20 @@ the application can be put behind a reverse proxy like Nginx or Apache, here is 
     </Location>
 </VirtualHost>
 ```
+
+### Testing
+
+#### Requirements
+
+- java \
+  Download and install from [Java](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html)
+- maven \
+  Comes with the Project
+
+#### Steps
+
+1. Open a terminal
+2. Run the tests
+    ```bash
+    ./mvnw test
+    ```
