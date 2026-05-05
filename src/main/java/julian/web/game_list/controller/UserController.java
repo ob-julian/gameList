@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class UserController {
@@ -29,13 +30,30 @@ public class UserController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/addUser")
-    public String addUser(@RequestParam String username, @RequestParam String password, @RequestParam String confirmPassword, @RequestParam Long roleId, @RequestParam Boolean passwordChangeRequired) {
+    public String addUser(
+            @RequestParam String username,
+            @RequestParam String password,
+            @RequestParam String confirmPassword,
+            @RequestParam Long roleId,
+            @RequestParam(defaultValue = "false") Boolean passwordChangeRequired,
+            RedirectAttributes redirectAttributes) {
+
         if (!password.equals(confirmPassword)) {
             return "redirect:/addUser";
         }
+
         userService.createUser(username, password, passwordChangeRequired);
+
         userService.addRoleToUser(username, roleId);
 
-        return "redirect:/";
+        redirectAttributes.addFlashAttribute("username", username);
+
+        return "redirect:/userCreated";
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/userCreated")
+    public String userCreated() {
+        return "userCreated";
     }
 }

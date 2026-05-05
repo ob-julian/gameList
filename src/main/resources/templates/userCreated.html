@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Created</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body class="darkMode">
+    <div th:insert="~{fragments :: themeSwitcher}"></div>
+    <h1 class="header-title">User Created</h1>
+    <div class="game-card center-form">
+        <p>User <strong th:text="${username}">Username</strong> was created.</p>
+        <div>
+            <a th:href="@{/addUser}" class="submit-button">Add Another User</a>
+        <a th:href="@{/}" class="submit-button">Go to Home</a>
+        </div>
+    </div>
+</body>
+</html>
