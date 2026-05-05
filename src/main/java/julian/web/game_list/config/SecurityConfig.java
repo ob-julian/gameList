@@ -2,7 +2,7 @@ package julian.web.game_list.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
@@ -23,7 +23,7 @@ import julian.web.game_list.filter.PasswordExpirationFilter;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
     @Bean
@@ -47,8 +47,8 @@ public class SecurityConfig {
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/")
             )
-            .csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**")).
-            headers(headers -> headers.frameOptions().sameOrigin())
+            .csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"))
+            .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin()))
             .passwordManagement((management) -> management
                 .changePasswordPage("/changePassword")
             )
